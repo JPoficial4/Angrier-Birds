@@ -1,3 +1,4 @@
+
 // Pegando as ferramentas principais do Matter.js
 var Engine = Matter.Engine;
 var Render = Matter.Render;
@@ -49,7 +50,7 @@ var pig4 = new Pig(1200,400,"assets/porco.png")
 var pig5 = new Pig(1100,400,"assets/porco.png")
 var pig6 = new Pig(1000,400,"assets/porco.png")
 var pig7 = new Pig(1900,400,"assets/porco.png")
-var slingshot = new Slingshot (
+var slingshot = new SlingShot (
   bird.body,
   {
     //scale = 1.5,
@@ -115,7 +116,7 @@ pig4.addToWorld(world);
 pig5.addToWorld(world);
 pig6.addToWorld(world);
 pig7.addToWorld(world);
-slingshot.addToWorld(world)
+//slingshot.addToWorld(world)
 box1.addToWorld(world);
 box2.addToWorld(world);
 box3.addToWorld(world);
@@ -158,6 +159,7 @@ Events.on(render, "afterRender" , function() {
 
   slingshot.drawBack(ctx);
 
+
   slingshot.drawBands(ctx);
 
   bird.draw(ctx);
@@ -166,13 +168,25 @@ Events.on(render, "afterRender" , function() {
 
   slingshot.drawFront(ctx)
 
-  pig.draw(ctx);
+  pig1.draw(ctx);
+  pig2.draw(ctx);
+  pig3.draw(ctx);
+  pig4.draw(ctx);
+  pig5.draw(ctx);
+  pig6.draw(ctx);
+  pig7.draw(ctx);
 })
 
 setInterval(function(){
 
   bird.animate();
-  pig.animate();
+  pig1.animate();
+  pig2.animate();
+  pig3.animate();
+  pig4.animate();
+  pig5.animate();
+  pig6.animate();
+  pig7.animate();
 } )
 
 
