@@ -62,15 +62,15 @@ class SlingShot {
 
     // Imagem da madeira de trás
     this.imageBack = new Image();
-    this.imageBack.src = "assets/estilingue-tras.png";
+    this.imageBack.src = "assets/estilingue_p.png.png";
 
     // Imagem da madeira da frente
     this.imageFront = new Image();
-    this.imageFront.src = "assets/estilingue-frente.png";
+    this.imageFront.src = "assets/estilingue_g.png.png";
 
     // Imagem do couro
     this.imageBase = new Image();
-    this.imageBase.src = "assets/estilingue.png";
+    this.imageBase.src = "assets/estilinguefrente.png.png";
   }
 
   // Madeira de trás
