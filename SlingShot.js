@@ -11,8 +11,8 @@ class SlingShot {
     this.constraint = Constraint.create({
      bodyA:body,
      pointB:pointB,
-     stiffness = options.stifness || 0.04,
-     length = options.length || 1,
+     stiffness:options.stifness || 0.04,
+     length:options.length || 1,
      render:{
         visible:false
      }
@@ -152,7 +152,10 @@ class SlingShot {
     Body.setVelocity(this.body, {
         x: dx * this.launchPower,
         y: dy * this.launchPower
+        
     })
+    this.dragging = false;
+    this.attached = false; 
 
    }
 
