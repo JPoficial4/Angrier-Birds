@@ -39,7 +39,7 @@ var ground = Bodies.rectangle(500,850,3000,300,{
   }
 });
 
-var slingY = 350;
+var slingY = 540;
 var birdBack = 25;
 var slingX = 150 - birdBack;
 
@@ -56,10 +56,12 @@ var pig4 = new Pig(1200,400,"assets/porco.png")
 var pig5 = new Pig(1100,400,"assets/porco.png")
 var pig6 = new Pig(1000,400,"assets/porco.png")
 var pig7 = new Pig(1900,400,"assets/porco.png")
-var slingshot = new SlingShot( 
-  bird.body, { 
-  x: 125, y: 350 },
-  { x: 150, y: 255,
+var slingshot = new SlingShot(
+  bird.body,
+  { x: slingX, y: slingY },
+  {
+    x: 150,
+y:540,
   forkLeftOffsetX: 20, forkLeftOffsetY: 30, 
   forkRightOffsetX: 60, forkRightOffsetY: 30 } 
 )
