@@ -56,21 +56,12 @@ var pig4 = new Pig(1200,400,"assets/porco.png")
 var pig5 = new Pig(1100,400,"assets/porco.png")
 var pig6 = new Pig(1000,400,"assets/porco.png")
 var pig7 = new Pig(1900,400,"assets/porco.png")
-var slingshot = new SlingShot (
-  bird.body,
-  {
-    //scale = 1.5,
-
-    x:150,
-    y:255,
-
-    forkLeftOffsetX:20,
-    forkLeftOffsetY:30,
-
-    forkRightOffsetX: 60,
-    forkRightOffsetY:30
-
-  }
+var slingshot = new SlingShot( 
+  bird.body, { 
+  x: 125, y: 350 },
+  { x: 150, y: 255,
+  forkLeftOffsetX: 20, forkLeftOffsetY: 30, 
+  forkRightOffsetX: 60, forkRightOffsetY: 30 } 
 )
 var box1 = new Box(680,600,50,100,"assets/caixa.png.png");
 var box2 = new Box(650,600,50,50,"assets/caixalonga.png.png");
@@ -203,12 +194,16 @@ setInterval(function(){
 var canvas = render.canvas;
 
 function getMousePos(event){
-  var rect = canvas.getBoundingClientRect;
+  var rect = canvas.getBoundingClientRect();
+  var scaleX = canvas.width / rect.width;
+  var scaleY = canvas.height / rect.height;
   return{
-    x: event.clientX - rect.left,
-    y: event.clientY - rect.right
+    x: (event.clientX - rect.left) * scaleX,
+    y: (event.clientY - 
+rect.top
+) * scaleY
   };
-}
+} 
 
 canvas.addEventListener("mousedown",function(event) {
   var pos = getMousePos(event);
@@ -218,6 +213,7 @@ canvas.addEventListener("mousedown",function(event) {
 canvas.addEventListener("mousemove",function(event) {
   if(!slingshot.dragging){
     return
+
   }
   var pos = getMousePos(event);
   slingshot.dragTo(pos.x , pos.y)
@@ -225,6 +221,8 @@ canvas.addEventListener("mousemove",function(event) {
 
 function onMouseRelease(){
   slingshot.release(world)
+  
+
 }
 
 canvas.addEventListener("mouseup",onMouseRelease)
