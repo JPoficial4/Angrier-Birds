@@ -3,7 +3,7 @@ class Box{
      this.body = Bodies.rectangle(x,y,width,height,{
         restitution: 0.2,
         friction: 1,
-        density: 1,
+        density: 0.01,
       render:{
         sprite:{
            texture: image,
