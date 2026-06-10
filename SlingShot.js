@@ -138,26 +138,34 @@ class SlingShot {
 
  }
 
-   release(world){
-    if(!this.dragging || !this.attached){
-        return false
-    }
-    var dx = this.pointB.x - this.body.position.x;
-    var dy = this.pointB.y - this.body.position.y;
-
-    Composite.remove(world,this.constraint);
-    this.constraint = null;
-
-    Body.setSleeping(this.body,false);
-    Body.setVelocity(this.body, {
-        x: dx * this.launchPower,
-        y: dy * this.launchPower
-        
-    })
+   release(world) {
+  if (!this.dragging || !this.attached) {
     this.dragging = false;
-    this.attached = false; 
+    return false;
+  }
 
-   }
+  var dX = this.pointB.x - this.body.position.x;
+  var dY = this.pointB.y - this.body.position.y;
+
+  this.dragging = false;  // ← muda ANTES de remover
+  this.attached = false;  // ← muda ANTES de remover
+
+  Composite.remove(world, this.constraint);
+  this.constraint = null;
+
+  Body.setStatic(this.body, false);  // ← garante que não tá estático
+  Body.setSleeping(this.body, false);
+  Body.setVelocity(this.body, {
+    x: dX * this.launchPower,
+    y: dY * this.launchPower
+  });
+  this.dragging = false;
+  this.attached = false; 
+
+} 
+    
+   
+   
 
   // Madeira de trás
   drawBack(ctx) {
