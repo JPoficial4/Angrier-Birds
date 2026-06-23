@@ -9,6 +9,10 @@ var Constraint = Matter.Constraint
 var Body = Matter.Body;
 var Events = Matter.Events;
 
+var pigAtingido = false
+var jogoFinalizado = false
+var tempoLancamento = 0
+
 // Criando o cérebro da física
 var engine = Engine.create();
 
@@ -99,12 +103,14 @@ var box31 = new Box(1400,500,50,100,"assets/caixalonga.png.png");
 var box32 = new Box(500,600,50,100,"assets/caixalonga.png.png");
 var box33 = new Box(900,500,50,100,"assets/caixalonga.png.png");
 var box34 = new Box(600,600,50,100,"assets/caixalonga.png.png");
-
+var trajectory = [];
 
 
 
 // Colocando o chão no mundo
 Composite.add(world, ground);
+
+
 
 // Colocando os objetos no mundo
 bird.addToWorld(world);
@@ -151,6 +157,39 @@ box32.addToWorld(world);
 box33.addToWorld(world);
 box34.addToWorld(world);
 
+var painelFinal = document.createElement("div");
+painelFinal.style.position = "absolute"
+painelFinal.style.top = "50%"
+painelFinal.style.left = "50%"
+painelFinal.style.transform = "translate(-50% , -50%)"
+painelFinal.style.backgroundColor = "rgba(0,0,0,0.85)"
+painelFinal.style.color = "white"
+painelFinal.style.padding = "25px"
+painelFinal.style.borderRadius = "15px"
+painelFinal.style.textAlign = "center"
+painelFinal.style.fontFamily = "Arial"
+painelFinal.style.display = "none"
+painelFinal.style.zIndex = "10"
+startFade();{
+  this.fading = false;
+  Body.setStatic(this.body , true);
+}
+
+updateFade(world, callbackFinal);{
+  if(!this.fading || this.removed)return;
+
+  this.alpha -= 0.03
+  if(this.alpha <= 0 ){
+    this.alpha = 0
+    this.removed = true
+    Composite.remove(world, this.body)
+
+    if(callbackFinal){
+      callbackFinal();
+    }
+  }
+}
+
 
 Events.on(render, "afterRender" , function() { 
 
@@ -168,8 +207,38 @@ Events.on(render, "afterRender" , function() {
     slingshot.drawPouch(ctx);
   }
 
-  
+  if(!slingshot.isAttached){
 
+    trajectory.push({
+      x: bird.body.position.x,
+      y: bird.body.position.y,
+      life:60
+    })
+  }
+
+if (!slingshot.isAttached()) {
+  trajectory.push({
+    x: bird.body.position.x,
+    y: bird.body.position.y,
+    life: 60
+  });
+}
+
+
+for (var i = trajectory.length - 1; i >= 0; i--) {
+  var p = trajectory[i];
+
+  ctx.beginPath();
+  ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+  ctx.fillStyle = "rgba(255,255,255," + (p.life / 60) + ")";
+  ctx.fill();
+
+  p.life--;
+
+  if (p.life <= 0) {
+    trajectory.splice(i, 1);
+  }
+}
   slingshot.drawFront(ctx)
 
   pig1.draw(ctx);
@@ -223,8 +292,6 @@ canvas.addEventListener("mousemove",function(event) {
 
 function onMouseRelease(){
   slingshot.release(world)
-  
-
 }
 
 canvas.addEventListener("mouseup",onMouseRelease)
