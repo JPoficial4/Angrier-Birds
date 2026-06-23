@@ -2,6 +2,7 @@ class Pig {
    constructor(x, y, image) {
      this.body = Bodies.circle(x, y, 28, {
       restitution: 0.3,
+      label: "pig",
       render: {
            sprite: {
             texture: image,
@@ -10,6 +11,9 @@ class Pig {
         }
       }
      });
+     this.alpha = 1
+     this.fading = false
+     this.removed = false
    }
 
    addToWorld(world) {
@@ -18,11 +22,35 @@ class Pig {
 
 
    draw(ctx) {
-     
+     if(this.removed) return;
+      var larguraFrame = 900;
+      var alturaFrame = 900;
+
+      var xSprite = 0;
+      var ySprite = this.altura * alturaFrame
+
+      ctx.save()
+
+      ctx.globalAlpha = this.alpha
+      ctx.translate(this.body,position.x, this.body.position.y)
+      ctx.rotate(this.body.angle);
+
+      ctx.drawImage(
+        this.image,
+        xSprite,
+        ySprite,
+        larguraFrame,
+        alturaFrame,
+        -45,
+        -45,
+        90,
+        90
+      );
+      ctx.restore();  
    }
 
    
    animate() {
-   
+  
    }
 }
