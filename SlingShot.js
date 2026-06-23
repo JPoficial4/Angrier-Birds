@@ -94,7 +94,23 @@ class SlingShot {
   addToWorld(world) {
     Composite.add(world,this.constraint)
   }
+    attach(newBody,world){
 
+
+   this.body = newBody
+   this.attached = true
+   this.dragging = false
+
+   this.constraint = Constraint.create({
+    bodyA: this.body,
+    pointB: this.pointB,
+    stiffness: 0.04,
+    lenght:1,
+    render:{
+      visible: false
+    }
+   })
+    }
   isAttached(){
     return this.attached
   }
@@ -139,29 +155,47 @@ class SlingShot {
  }
 
    release(world) {
-  if (!this.dragging || !this.attached) {
+  if (!this.attached) {
     this.dragging = false;
+    return false;
+  }
+  var estavaArrastando = this.dragging
+  this.dragging = false;
+
+  if(!estavaArrastando){
     return false;
   }
 
   var dX = this.pointB.x - this.body.position.x;
   var dY = this.pointB.y - this.body.position.y;
+  var dist = Math.sqrt(dx*dx + dy*dy)
+  var minimoArrasto = 15
 
-  this.dragging = false;  // ← muda ANTES de remover
-  this.attached = false;  // ← muda ANTES de remover
+  if(dist < minimoArrasto){
+    Body.setPosition(this.body,{
+      x: this.pointB.x,
+      y: this.pointB.y
+    });
+    Body.setVelocity(this.body,{x:0, y:0})
+    Body.setAngularVelocity(this.body,0);
+    return false;
+  }
+   this.attached = false;
 
-  Composite.remove(world, this.constraint);
-  this.constraint = null;
+   var forcaX = this.pointB.x - this.body.position.x
+   var forcaY = this.pointB.y - this.body.position.y
 
-  Body.setStatic(this.body, false);  // ← garante que não tá estático
-  Body.setSleeping(this.body, false);
-  Body.setVelocity(this.body, {
-    x: dX * this.launchPower,
-    y: dY * this.launchPower
-  });
-  this.dragging = false;
-  this.attached = false; 
+   Composite.remove(world, this.constraint)
+   this.constraint = null;
 
+   Body.setSleeping(this.body , false)
+
+   Body.setVelocity(this.body , {
+    x: forcaX * this.launchPower,
+    y: forcaY * this.launchPower
+   })
+
+   return true;
 } 
     
    
