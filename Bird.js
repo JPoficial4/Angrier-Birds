@@ -3,6 +3,7 @@ class Bird {
      this.body = Bodies.circle(x, y, 25, {
       restitution: 0.6,
       density: 0.01,
+      label: "bird",
       render: {
            sprite: {
             texture: image,
@@ -18,12 +19,12 @@ class Bird {
    }
 
   
-   draw(ctx) {
- 
+   draw() {
+
    }
 
    
    animate() {
-     
+ 
    }
 }
