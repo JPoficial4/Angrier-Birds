@@ -170,14 +170,104 @@ painelFinal.style.textAlign = "center"
 painelFinal.style.fontFamily = "Arial"
 painelFinal.style.display = "none"
 painelFinal.style.zIndex = "10"
+
+document.body.appendChild(painelFinal);
+
+function mostrarTelaFinal(){
+
+  jogoFinalizado = true
+
+  painelFinal.innerHTML = `
+  <h1 style = "margin-top:0;">Você Venceu!<h1/>
+   
+
+  <img = 
+  src ="assets/Continuar.png"
+  onClick="proximaFase()"
+  style="width:120px; cursor:pointer; margin:10px
+  >
+
+  <img = 
+  src ="assets/Voltar.png"
+  onClick="reiniciarJogo()"
+  style="width:120px; cursor:pointer; margin:10px
+  >
+
+  `;
+  painelFinal.style.display = "block";
+
+
+}
+
+function proximaFase () {
+  alert("Erro: Eu tive preguiça de faser outra fase!")
+}
+
+function reiniciarJogo (){
+  location.reload();
+}
+
+function resetarPassaro (){
+  if (pigAtingido || jogoFinalizado){
+    return;
+  }
+  Composite.remove(world,bird.body);
+
+  bird = new Bird(200,600,"assets/redbird.png")
+  bird.addToWorld(world);
+
+  slingshot.attach(bird.body,world)
+  
+  trajectory = [];
+  tempoLancamento = 0;
+}
+
+function verificarResetDoPassaro(){
+
+  if(slingshot.isAttached()){
+    return;
+  }
+  if(pigAtingido || jogoFinalizado){
+    return;
+  }
+
+  var agora = Date.now();
+  var tempoPassado = agora - tempoLancamento;
+
+  var saiuDaTela = 
+  bird.body.position.x > 2000 ||
+  bird.body.position.y > 1000 ||
+  bird.body.position.x < - 100;
+
+  var parou = 
+  bird.body.speed < 1 &&
+  tempoPassado > 2500;
+
+  if(saiuDaTela || parou){
+    resetarPassaro();
+  }
+}
+
+function atingiuPorco() {
+  if(pigAtingido || jogoFinalizado || pig1.removed){
+    return;
+  }
+
+  pigAtingido = true
+  pig1.startFade();
+
+
+}
+
 startFade();{
   this.fading = false;
   Body.setStatic(this.body , true);
 }
 
 updateFade(world, callbackFinal);{
-  if(!this.fading || this.removed)return;
-
+  if(!this.fading || this.removed){
+    return;
+  }
   this.alpha -= 0.03
   if(this.alpha <= 0 ){
     this.alpha = 0
@@ -190,6 +280,39 @@ updateFade(world, callbackFinal);{
   }
 }
 
+
+Events.on(engine, "collisionStart", function(event)){
+  if (slingshot.isAttached()){
+    return;
+  }
+  var pairs = event.pairs;
+  for (var i = 0; i < pairs.length; i++){
+    var bodyA = pairs[i].bodyA;
+    var bodyB = pairs[i].bodyB;
+    var bateuNoPorco = 
+    (bodyA.label === "bird" && bodyB.label === "pig") ||
+    (bodyB.label === "bird" && bodyA.label === "pig")
+    if(bateuNoPorco){
+      atingirPorco();
+      break;
+    }
+
+  }
+}
+function verificarColisaoComPorco(){
+
+  if(slingshot.isAttached() || pigAtingido || jogoFinalizado || pig1.removed){
+    return;
+  }
+
+  var dx = bird.body.position.x - pig1.body.position.x;
+  var dy = bird.body.position.y - pig1.body.position.y;
+  var raioColisao = 25 + 28
+
+  if(dx*dx + dy * dy <- raioColisao * raioColisao){
+    atingirPorco();
+  }
+}
 
 Events.on(render, "afterRender" , function() { 
 
